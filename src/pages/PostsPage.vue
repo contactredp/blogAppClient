@@ -28,7 +28,7 @@
                 posts.data = data;
             };
 
-            watch(() => user.isAdmin,
+            /*watch(() => user.isAdmin,
                 async () => {
 
                     let { data } = await api.get("/posts/all");
@@ -37,12 +37,17 @@
 
                 },
                 { immediate: true }
-            )
+            )*/
 
-            onBeforeMount(() => {
+            onBeforeMount(async () => {
+
                 if (!user.token) {
-                    router.push({ path: "/login" });
+                    router.push("/login");
+                    return;
                 }
+
+                let { data } = await api.get("/posts/all");
+                posts.data = data;
             });
 
             return {

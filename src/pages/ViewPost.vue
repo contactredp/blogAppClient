@@ -13,6 +13,16 @@
     import EditPost from "../components/EditPost.vue";
     import DeletePost from "../components/DeletePost.vue";
 
+    import { computed } from 'vue';
+
+    const canEdit = computed(() => {
+        return user.id === post.data.userId;
+    });
+
+    const canDelete = computed(() => {
+        return user.isAdmin || user.id === post.data.userId;
+    });
+
     const router = useRouter();
 
     const { user } = useGlobalStore();
@@ -68,12 +78,28 @@
                     Posted on: {{ post.data.createdOn }}
                 </p>
 
-                <div class="d-flex" v-if="user.isAdmin">
+                <!-- <div class="d-flex" v-if="user.isAdmin">
                     <EditPost class="mx-1" :post="post.data" @edit-success="refreshPage" />
                     <DeletePost class="mx-1" :post="post.data" @post-deleted="goBack" />
                 </div>
                 <div class="d-flex" v-if="!user.isAdmin">
                     <router-link class="btn btn-primary" :to="{ name: 'Logout' }">Login as admin to edit or delete</router-link>
+                </div> -->
+
+                <div class="d-flex gap-2">
+
+                    <EditPost
+                        v-if="canEdit"
+                        :post="post.data"
+                        @edit-success="refreshPage"
+                    />
+
+                    <DeletePost
+                        v-if="canDelete"
+                        :post="post.data"
+                        @post-deleted="goBack"
+                    />
+
                 </div>
             </div>
 

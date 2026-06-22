@@ -9,7 +9,8 @@ export const useGlobalStore = defineStore('global', () => {
 	let user = reactive({
 		token: localStorage.getItem('token'),
 		email: null,
-		isAdmin: null
+		isAdmin: null,
+		id: null
 	})
 
 	async function getUserDetails(token) {
@@ -17,6 +18,7 @@ export const useGlobalStore = defineStore('global', () => {
 			user.token = null;
 			user.email = null;
 			user.isAdmin = null;
+			user.id = null;
 
 			return;
 		}
@@ -32,6 +34,7 @@ export const useGlobalStore = defineStore('global', () => {
 		user.email = data.email;
 		// user.isAdmin = data.user.isAdmin;
 		user.isAdmin = data.isAdmin;
+		user.id = data._id;
 	}
 
 	return {
